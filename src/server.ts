@@ -1,4 +1,4 @@
-import './setup.js';
-import app from './app.js';
+import './setup';
+import app from './app';
 
 app.listen(process.env.PORT);
