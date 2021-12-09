@@ -28,7 +28,6 @@ CREATE TABLE "questions" (
 
 CREATE TABLE "classes" (
 	"id" serial NOT NULL,
-	"name" varchar(3) NOT NULL,
 	"name" varchar(3) NOT NULL UNIQUE,
 	CONSTRAINT "classes_pk" PRIMARY KEY ("id")
 ) WITH (
@@ -56,3 +55,8 @@ ALTER TABLE "questions" ADD CONSTRAINT "questions_fk2" FOREIGN KEY ("user_answer
 
 
 ALTER TABLE "user_tokens" ADD CONSTRAINT "user_tokens_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
+
+INSERT INTO "classes" (name) VALUES ('T1');
+INSERT INTO "classes" (name) VALUES ('T2');
+INSERT INTO "classes" (name) VALUES ('T3');
+INSERT INTO "classes" (name) VALUES ('T4');
