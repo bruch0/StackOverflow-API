@@ -3,7 +3,6 @@ CREATE TABLE "users" (
 	"name" varchar(255) NOT NULL,
 	"class_id" integer NOT NULL,
 	"answers" integer NOT NULL,
-	"score" integer NOT NULL,
 	"total_score" integer NOT NULL,
 	CONSTRAINT "users_pk" PRIMARY KEY ("id")
 ) WITH (
