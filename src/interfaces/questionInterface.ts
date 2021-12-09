@@ -1,13 +1,15 @@
-interface Question {
+interface QuestionOnRepository {
   userId: number;
   userClassId: number;
   question: string;
   tags: string;
   submitionDate: string;
-  answer: any;
-  answerDate: string;
-  answerUserId: number;
-  score: number;
 }
 
-export { Question };
+interface QuestionOnService {
+  userToken: string;
+  question: string;
+  tags: string;
+}
+
+export { QuestionOnRepository, QuestionOnService };
