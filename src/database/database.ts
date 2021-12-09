@@ -1,6 +1,7 @@
 import pg from 'pg';
 
 const { Pool } = pg;
+
 let connectionData;
 
 if (process.env.NODE_ENV === 'prod') {
