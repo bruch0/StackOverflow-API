@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === 'prod') {
     database: process.env.DB_DATABASE,
   };
 }
+
 const connection = new Pool(connectionData);
 
 export default connection;
