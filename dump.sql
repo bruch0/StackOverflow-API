@@ -11,7 +11,7 @@ CREATE TABLE "users" (
 
 CREATE TABLE "questions" (
 	"id" serial NOT NULL,
-	"user_id" serial NOT NULL,
+	"user_id" integer NOT NULL,
 	"user_class_id" integer NOT NULL,
 	"question" varchar(255) NOT NULL,
 	"tags" varchar(255) NOT NULL,
