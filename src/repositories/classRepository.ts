@@ -9,4 +9,10 @@ const getUserClassById = async (classId: number) => {
   return className.rows[0].name;
 };
 
-export { getUserClassById };
+const getAllClasses = async () => {
+  const classes = await connection.query('SELECT * FROM classes');
+
+  return classes.rows;
+};
+
+export { getUserClassById, getAllClasses };

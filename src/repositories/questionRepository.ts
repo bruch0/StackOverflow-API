@@ -47,9 +47,18 @@ const getQuestion = async (questionId: number) => {
   return question.rows[0];
 };
 
+const getAllUnansweredQuestions = async () => {
+  const questions = await connection.query(
+    `SELECT * FROM questions WHERE answer = ''`
+  );
+
+  return questions.rows;
+};
+
 export {
   registerQuestion,
   checkQuestionIsAlreadyAnswered,
   answerQuestion,
   getQuestion,
+  getAllUnansweredQuestions,
 };

@@ -19,4 +19,10 @@ const getUsernameById = async (userId: number) => {
   return user.rows[0].name;
 };
 
-export { createUser, getUsernameById };
+const getAllUsers = async () => {
+  const users = await connection.query('SELECT * FROM users');
+
+  return users.rows;
+};
+
+export { createUser, getUsernameById, getAllUsers };
