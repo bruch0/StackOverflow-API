@@ -1,8 +1,8 @@
 import connection from '../database/database';
 
-import { QuestionOnRepository } from '../interfaces/questionInterface';
+import { QuestionDB } from '../interfaces/questionInterface';
 
-const registerQuestion = async (questionInfo: QuestionOnRepository) => {
+const registerQuestion = async (questionInfo: QuestionDB) => {
   const { userId, userClassId, question, tags, submitionDate } = questionInfo;
 
   const questionId = await connection.query(
@@ -13,4 +13,27 @@ const registerQuestion = async (questionInfo: QuestionOnRepository) => {
   return questionId.rows[0].id;
 };
 
-export { registerQuestion };
+const checkQuestionIsAlreadyAnswered = async (
+  questionId: number
+): Promise<Boolean> => {
+  const question = await connection.query(
+    `SELECT * FROM questions WHERE id = $1 AND answer != ''`,
+    [questionId]
+  );
+
+  return Boolean(question.rowCount);
+};
+
+const answerQuestion = async (
+  questionId: number,
+  answer: string,
+  answerDate: string,
+  userId: number
+) => {
+  await connection.query(
+    'UPDATE questions SET answer = $1, answer_date = $2, user_answer_id = $3 WHERE id = $4',
+    [answer, answerDate, userId, questionId]
+  );
+};
+
+export { registerQuestion, checkQuestionIsAlreadyAnswered, answerQuestion };
