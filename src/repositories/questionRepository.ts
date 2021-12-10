@@ -36,4 +36,20 @@ const answerQuestion = async (
   );
 };
 
-export { registerQuestion, checkQuestionIsAlreadyAnswered, answerQuestion };
+const getQuestion = async (questionId: number) => {
+  const question = await connection.query(
+    'SELECT * FROM questions WHERE id = $1',
+    [questionId]
+  );
+
+  if (!question) return false;
+
+  return question.rows[0];
+};
+
+export {
+  registerQuestion,
+  checkQuestionIsAlreadyAnswered,
+  answerQuestion,
+  getQuestion,
+};
