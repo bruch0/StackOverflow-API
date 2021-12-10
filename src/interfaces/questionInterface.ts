@@ -16,4 +16,16 @@ interface Answer {
   questionId: number;
 }
 
-export { QuestionDB, Question, Answer };
+interface QuestionInfo {
+  id: number;
+  question: string;
+  student: string;
+  class: string;
+  submitAt: string;
+  answered: boolean;
+  answeredAt?: string;
+  answer?: string;
+  answeredBy?: string;
+}
+
+export { QuestionDB, Question, Answer, QuestionInfo };
