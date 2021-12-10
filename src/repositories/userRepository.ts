@@ -11,4 +11,12 @@ const createUser = async (userInfo: User) => {
   return user.rows[0].id;
 };
 
-export { createUser };
+const getUsernameById = async (userId: number) => {
+  const user = await connection.query('SELECT * FROM users WHERE id = $1', [
+    userId,
+  ]);
+
+  return user.rows[0].name;
+};
+
+export { createUser, getUsernameById };
