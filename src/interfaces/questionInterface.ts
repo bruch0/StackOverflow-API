@@ -1,15 +1,19 @@
-interface QuestionOnRepository {
-  userId: number;
-  userClassId: number;
+interface Question {
+  userToken?: string;
   question: string;
   tags: string;
+}
+
+interface QuestionDB extends Question {
+  userId: number;
+  userClassId: number;
   submitionDate: string;
 }
 
-interface QuestionOnService {
+interface Answer {
   userToken: string;
-  question: string;
-  tags: string;
+  answer: string;
+  questionId: number;
 }
 
-export { QuestionOnRepository, QuestionOnService };
+export { QuestionDB, Question, Answer };
