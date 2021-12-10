@@ -9,4 +9,6 @@ router.post('/question/:questionId', questionController.answerQuestion);
 
 router.get('/question/:questionId', questionController.getQuestion);
 
+router.get('/questions', questionController.getAllUnansweredQuestions);
+
 export default router;
