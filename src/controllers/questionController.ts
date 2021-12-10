@@ -96,4 +96,23 @@ const getQuestion = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { registerQuestion, answerQuestion, getQuestion };
+const getAllUnansweredQuestions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const questions = await questionService.getAllUnansweredQuestions();
+
+    return res.send(questions);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export {
+  registerQuestion,
+  answerQuestion,
+  getQuestion,
+  getAllUnansweredQuestions,
+};
