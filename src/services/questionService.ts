@@ -103,4 +103,34 @@ const getQuestion = async (questionId: number) => {
   return questionInfo;
 };
 
-export { registerQuestion, answerQuestion, getQuestion };
+const getAllUnansweredQuestions = async () => {
+  const questions = await questionRepository.getAllUnansweredQuestions();
+  const usernames = await userRepository.getAllUsers();
+  const userClasses = await classRepostory.getAllClasses();
+
+  const formatedQuestions: any = [];
+
+  questions.forEach(async (question) => {
+    const user = usernames.filter((name) => name.id === question.user_id)[0];
+    const userClass = userClasses.filter(
+      (availableClass) => availableClass.id === question.user_class_id
+    )[0];
+
+    formatedQuestions.push({
+      id: question.id,
+      question: question.question,
+      student: user.name,
+      class: userClass.name,
+      submitAt: question.submition_date,
+    });
+  });
+
+  return formatedQuestions;
+};
+
+export {
+  registerQuestion,
+  answerQuestion,
+  getQuestion,
+  getAllUnansweredQuestions,
+};
