@@ -13,7 +13,7 @@ const getUserInfoByToken = async (userToken: string) => {
     [userToken]
   );
 
-  if (!user) return false;
+  if (!user.rows) return false;
 
   const userId = user.rows[0].user_id;
 
