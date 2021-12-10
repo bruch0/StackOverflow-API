@@ -7,4 +7,6 @@ router.post('/question', questionController.registerQuestion);
 
 router.post('/question/:questionId', questionController.answerQuestion);
 
+router.get('/question/:questionId', questionController.getQuestion);
+
 export default router;
