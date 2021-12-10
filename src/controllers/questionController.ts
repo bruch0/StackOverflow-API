@@ -79,4 +79,21 @@ const answerQuestion = async (
   }
 };
 
-export { registerQuestion, answerQuestion };
+const getQuestion = async (req: Request, res: Response, next: NextFunction) => {
+  const questionId = Number(req.params.questionId);
+
+  if (!questionId || questionId < 1) return res.status(400).send('Id inválido');
+
+  try {
+    const question = await questionService.getQuestion(questionId);
+
+    return res.send(question);
+  } catch (error) {
+    if (error.name === 'questionNotFound')
+      return res.status(403).send(error.message);
+
+    next(error);
+  }
+};
+
+export { registerQuestion, answerQuestion, getQuestion };
