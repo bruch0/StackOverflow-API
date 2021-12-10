@@ -2,13 +2,19 @@ import dayjs from 'dayjs';
 
 import * as questionRepository from '../repositories/questionRepository';
 import * as tokenRepository from '../repositories/tokenRepository';
+import * as userRepository from '../repositories/userRepository';
+import * as classRepostory from '../repositories/classRepository';
 
-import { Answer, Question } from '../interfaces/questionInterface';
+import {
+  Answer,
+  Question,
+  QuestionInfo,
+} from '../interfaces/questionInterface';
 import { questionSchema, answerSchema } from '../validations/question';
 import {
   InvalidAnswer,
   InvalidQuestion,
-  QuestionAnswered,
+  QuestionAlreadyAnswered,
   QuestionNotFound,
 } from '../errors/question';
 import { UserNotFound } from '../errors/user';
@@ -46,7 +52,7 @@ const answerQuestion = async (answerInfo: Answer) => {
 
   const isAlreadyAnswered =
     await questionRepository.checkQuestionIsAlreadyAnswered(questionId);
-  if (isAlreadyAnswered) throw new QuestionAnswered();
+  if (isAlreadyAnswered) throw new QuestionAlreadyAnswered();
 
   const validation = answerSchema.validate({ answer });
   if (validation.error) throw new InvalidQuestion();
@@ -65,4 +71,36 @@ const answerQuestion = async (answerInfo: Answer) => {
   );
 };
 
-export { registerQuestion, answerQuestion };
+const getQuestion = async (questionId: number) => {
+  const question = await questionRepository.getQuestion(questionId);
+
+  if (!question) throw new QuestionNotFound();
+
+  const username = await userRepository.getUsernameById(question.user_id);
+  const userClass = await classRepostory.getUserClassById(
+    question.user_class_id
+  );
+  let answerUsername = '';
+  let questionInfo: QuestionInfo = {
+    id: question.id,
+    question: question.question,
+    student: username,
+    class: userClass,
+    submitAt: question.submition_date,
+    answered: Boolean(question.answer),
+  };
+
+  if (question.answer) {
+    answerUsername = await userRepository.getUsernameById(
+      question.user_answer_id
+    );
+
+    questionInfo.answeredAt = question.answer_date;
+    questionInfo.answeredBy = answerUsername;
+    questionInfo.answer = question.answer;
+  }
+
+  return questionInfo;
+};
+
+export { registerQuestion, answerQuestion, getQuestion };
