@@ -12,7 +12,7 @@ class InvalidAnswer extends Error {
   }
 }
 
-class QuestionAnswered extends Error {
+class QuestionAlreadyAnswered extends Error {
   constructor() {
     super('Essa questão já foi respondida!');
     this.name = 'questionAnswered';
@@ -26,4 +26,9 @@ class QuestionNotFound extends Error {
   }
 }
 
-export { InvalidQuestion, InvalidAnswer, QuestionAnswered, QuestionNotFound };
+export {
+  InvalidQuestion,
+  InvalidAnswer,
+  QuestionAlreadyAnswered,
+  QuestionNotFound,
+};
