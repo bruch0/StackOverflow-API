@@ -33,11 +33,50 @@ const registerQuestion = async (
 
     return res.send({ questionId });
   } catch (error: any) {
-    if (error.name === 'userNotFound')
+    if (error.name === 'invalidQuestion')
       return res.status(400).send(error.message);
+    if (error.name === 'userNotFound')
+      return res.status(404).send(error.message);
 
     next(error);
   }
 };
 
-export { registerQuestion };
+const answerQuestion = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { answer } = req.body;
+  const { authorization } = req.headers;
+  const questionId: number = Number(req.params.questionId);
+
+  if (!authorization || authorization.indexOf('Bearer ') !== 0)
+    return res
+      .status(401)
+      .send('Envie seu token no formato Bearer token nos headers');
+
+  const userToken = authorization.replace('Bearer ', '');
+
+  if (!userToken || !answer || !questionId || questionId < 1)
+    return res
+      .status(400)
+      .send('Requisição inválida, insira seu token e a resposta');
+
+  try {
+    await questionService.answerQuestion({ userToken, answer, questionId });
+
+    return res.sendStatus(200);
+  } catch (error: any) {
+    if (error.name === 'invalidQuestion')
+      return res.status(400).send(error.message);
+    if (error.name === 'userNotFound')
+      return res.status(404).send(error.message);
+    if (error.name === 'questionAnswered')
+      return res.status(403).send(error.message);
+
+    next(error);
+  }
+};
+
+export { registerQuestion, answerQuestion };
