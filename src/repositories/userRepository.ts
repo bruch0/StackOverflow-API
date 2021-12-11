@@ -43,10 +43,19 @@ const updateUserAnsweredQuestions = async (userId: number) => {
   );
 };
 
+const getTopUsers = async () => {
+  const users = await connection.query(
+    'SELECT * FROM users ORDER BY total_score DESC LIMIT 10'
+  );
+
+  return users.rows;
+};
+
 export {
   createUser,
   getUsernameById,
   getAllUsers,
   updateUserScore,
   updateUserAnsweredQuestions,
+  getTopUsers,
 };
