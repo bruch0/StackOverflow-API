@@ -21,4 +21,17 @@ const createUser = async (userInfo: User): Promise<string> => {
   return token;
 };
 
-export { createUser };
+const getTopUsers = async () => {
+  const users = await userRepository.getTopUsers();
+
+  users.forEach((user) => {
+    user.points = user.total_score;
+    delete user.total_score;
+    delete user.id;
+    delete user.class_id;
+  });
+
+  return users;
+};
+
+export { createUser, getTopUsers };
