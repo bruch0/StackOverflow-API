@@ -72,6 +72,7 @@ const answerQuestion = async (answerInfo: Answer) => {
   );
 
   await userRepository.updateUserScore(userId, '+', question.score);
+  await userRepository.updateUserAnsweredQuestions(userId);
 };
 
 const getQuestion = async (questionId: number) => {

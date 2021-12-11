@@ -36,4 +36,17 @@ const updateUserScore = async (
   );
 };
 
-export { createUser, getUsernameById, getAllUsers, updateUserScore };
+const updateUserAnsweredQuestions = async (userId: number) => {
+  await connection.query(
+    `UPDATE users SET answers = answers + 1 WHERE id = $1`,
+    [userId]
+  );
+};
+
+export {
+  createUser,
+  getUsernameById,
+  getAllUsers,
+  updateUserScore,
+  updateUserAnsweredQuestions,
+};
