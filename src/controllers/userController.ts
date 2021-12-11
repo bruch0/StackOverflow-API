@@ -24,4 +24,14 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { createUser };
+const getTopUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const users = await userService.getTopUsers();
+
+    return res.send(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createUser, getTopUsers };
