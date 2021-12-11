@@ -25,4 +25,37 @@ const getAllUsers = async () => {
   return users.rows;
 };
 
-export { createUser, getUsernameById, getAllUsers };
+const updateUserScore = async (
+  userId: number,
+  operation: string,
+  add: number
+) => {
+  await connection.query(
+    `UPDATE users SET total_score = total_score ${operation} ${add} WHERE id = $1`,
+    [userId]
+  );
+};
+
+const updateUserAnsweredQuestions = async (userId: number) => {
+  await connection.query(
+    `UPDATE users SET answers = answers + 1 WHERE id = $1`,
+    [userId]
+  );
+};
+
+const getTopUsers = async () => {
+  const users = await connection.query(
+    'SELECT * FROM users ORDER BY total_score DESC LIMIT 10'
+  );
+
+  return users.rows;
+};
+
+export {
+  createUser,
+  getUsernameById,
+  getAllUsers,
+  updateUserScore,
+  updateUserAnsweredQuestions,
+  getTopUsers,
+};
