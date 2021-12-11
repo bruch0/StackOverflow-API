@@ -110,9 +110,36 @@ const getAllUnansweredQuestions = async (
   }
 };
 
+const voteQuestion = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { path } = req;
+  const questionId: number = Number(req.params.questionId);
+  const mode = path.split('/')[3];
+
+  if (!questionId || questionId < 1)
+    return res.status(400).send('Insira um id válido');
+
+  const operation = mode === 'up-vote' ? '+' : '-';
+
+  try {
+    await questionService.voteQuestion(questionId, operation);
+
+    return res.send('oii');
+  } catch (error: any) {
+    if (error.name === 'questionNotFound')
+      return res.status(404).send('Questão não encontrada');
+
+    next(error);
+  }
+};
+
 export {
   registerQuestion,
   answerQuestion,
   getQuestion,
   getAllUnansweredQuestions,
+  voteQuestion,
 };
