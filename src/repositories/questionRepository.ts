@@ -7,7 +7,7 @@ const registerQuestion = async (questionInfo: QuestionDB) => {
 
   const questionId = await connection.query(
     'INSERT INTO questions (user_id, user_class_id, question, tags, submition_date, answer, score) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
-    [userId, userClassId, question, tags, submitionDate, '', 0]
+    [userId, userClassId, question, tags, submitionDate, '', 1]
   );
 
   return questionId.rows[0].id;
@@ -15,13 +15,16 @@ const registerQuestion = async (questionInfo: QuestionDB) => {
 
 const checkQuestionIsAlreadyAnswered = async (
   questionId: number
-): Promise<Boolean> => {
+): Promise<{ isAlreadyAnswered: boolean; score: number }> => {
   const question = await connection.query(
-    `SELECT * FROM questions WHERE id = $1 AND answer != ''`,
+    `SELECT * FROM questions WHERE id = $1`,
     [questionId]
   );
 
-  return Boolean(question.rowCount);
+  return {
+    isAlreadyAnswered: Boolean(question.rows[0].answer),
+    score: question.rows[0].score,
+  };
 };
 
 const answerQuestion = async (
@@ -55,10 +58,20 @@ const getAllUnansweredQuestions = async () => {
   return questions.rows;
 };
 
+const updateQuestionScore = async (questionId: number, operation: string) => {
+  const user = await connection.query(
+    `UPDATE questions SET score = score ${operation} 1 WHERE id = $1 RETURNING *`,
+    [questionId]
+  );
+
+  return user.rows[0];
+};
+
 export {
   registerQuestion,
   checkQuestionIsAlreadyAnswered,
   answerQuestion,
   getQuestion,
   getAllUnansweredQuestions,
+  updateQuestionScore,
 };

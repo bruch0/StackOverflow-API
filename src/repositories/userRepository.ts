@@ -25,4 +25,15 @@ const getAllUsers = async () => {
   return users.rows;
 };
 
-export { createUser, getUsernameById, getAllUsers };
+const updateUserScore = async (
+  userId: number,
+  operation: string,
+  add: number
+) => {
+  await connection.query(
+    `UPDATE users SET total_score = total_score ${operation} ${add} WHERE id = $1`,
+    [userId]
+  );
+};
+
+export { createUser, getUsernameById, getAllUsers, updateUserScore };

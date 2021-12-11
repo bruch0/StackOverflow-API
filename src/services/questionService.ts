@@ -50,9 +50,10 @@ const registerQuestion = async (questionInfo: Question): Promise<number> => {
 const answerQuestion = async (answerInfo: Answer) => {
   const { questionId, answer, userToken } = answerInfo;
 
-  const isAlreadyAnswered =
-    await questionRepository.checkQuestionIsAlreadyAnswered(questionId);
-  if (isAlreadyAnswered) throw new QuestionAlreadyAnswered();
+  const question = await questionRepository.checkQuestionIsAlreadyAnswered(
+    questionId
+  );
+  if (question.isAlreadyAnswered) throw new QuestionAlreadyAnswered();
 
   const validation = answerSchema.validate({ answer });
   if (validation.error) throw new InvalidQuestion();
@@ -69,6 +70,8 @@ const answerQuestion = async (answerInfo: Answer) => {
     answerDate,
     userId
   );
+
+  await userRepository.updateUserScore(userId, '+', question.score);
 };
 
 const getQuestion = async (questionId: number) => {
@@ -128,9 +131,25 @@ const getAllUnansweredQuestions = async () => {
   return formatedQuestions;
 };
 
+const voteQuestion = async (questionId: number, operation: string) => {
+  const questionExists = await questionRepository.getQuestion(questionId);
+
+  if (!questionExists) throw new QuestionNotFound();
+
+  const user = await questionRepository.updateQuestionScore(
+    questionId,
+    operation
+  );
+
+  if (user.user_answer_id) {
+    await userRepository.updateUserScore(user.user_answer_id, operation, 1);
+  }
+};
+
 export {
   registerQuestion,
   answerQuestion,
   getQuestion,
   getAllUnansweredQuestions,
+  voteQuestion,
 };
